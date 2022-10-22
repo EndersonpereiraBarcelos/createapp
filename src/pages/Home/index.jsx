@@ -7,6 +7,8 @@ export default function Home() {
 
   const [students, setStudents] = useState([]);
 
+  const [user, setUser] = useState({ name: "", avatar: "" });
+
   function handleAddStudent() {
     const newStudent = {
       name: studentName,
@@ -20,20 +22,25 @@ export default function Home() {
     setStudents((prevState) => [...prevState, newStudent]);
   }
 
-  useEffect(()=>{
-    console.log("useEffect foi chamado")
-  },[])
-
-
+  useEffect(() => {
+    fetch("https://api.github.com/users/EndersonpereiraBarcelos")
+      .then((response) => response.json())
+      .then((data) => {
+        setUser({
+          name: data.name,
+          avatar: data.avatar_url,
+        });
+      });
+  }, []);
 
   return (
     <div className="container">
       <header>
-      <h1>Lista de presença</h1>
-      <div>
-        <strong>Endersonpb</strong>
-        <img src="https://github.com/EndersonpereiraBarcelos.png"/>
-      </div>
+        <h1>Lista de presença</h1>
+        <div>
+          <strong>{user.name}</strong>
+          <img src={user.avatar} alt="foto perfil" />
+        </div>
       </header>
       <input
         type="text"
